@@ -3,7 +3,6 @@ from PyPDF2 import PdfFileReader, PdfFileWriter
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from flask import Flask, request
-from google.cloud import storage
 import base64
 import json
 import zlib
@@ -14,7 +13,6 @@ import os
 app = Flask(__name__)
 
 def handwriting_gen_file(text, size, deg, height_add=0, reverse=False):
-    storage.Client().bucket('singularity-beta').blob('pdf-gen/Cursive.ttf').download_to_filename('Cursive.ttf')
     font = ImageFont.truetype('Cursive.ttf', size)
     fontimage = Image.new('L', (font.getsize(re.sub(r'[–—]', '-', re.sub(r'[«»“”]', '"', '  '.join(text.split()))))[0], sum(font.getmetrics()) - 20 + height_add))
     ImageDraw.Draw(fontimage).text((0, 0), text, fill=255, font=font)
@@ -23,7 +21,6 @@ def handwriting_gen_file(text, size, deg, height_add=0, reverse=False):
         return fontimage.rotate(deg, expand=True)
 
     ImageOps.invert(fontimage.rotate(deg, expand=True)).save(f'./{text}.png', 'PNG')
-    os.remove('Cursive.ttf')
 
 
 @app.route("/", methods=['POST'])

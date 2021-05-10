@@ -11,7 +11,7 @@ COPY requirements.txt Cursive.ttf .
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Copy the rest of the working directory contents into the container at /app
-# COPY . .
+COPY pdf_writer_service.py .
 
 # Run app.py when the container launches
-ENTRYPOINT ["python", "app.py"]
+ENTRYPOINT ["python", "pdf_writer_service.py"]

@@ -68,6 +68,9 @@ def pdf_gen():
     os.remove(blank_pdf)
     return base64.b64encode(zlib.compress(tmp.getvalue(), 9))
 
+@app.route('/hello')
+def hello():
+    return 'hello there'
 
 if __name__ == '__main__':
     server_port = os.environ.get('PORT', '8080')

@@ -73,7 +73,7 @@ def pdf_gen():
 def hello():
     print('START - hello')
 
-    return 'hello there'
+    return 'hello there\n'
 
 if __name__ == '__main__':
     server_port = os.environ.get('PORT', '8080')

@@ -25,6 +25,7 @@ def handwriting_gen_file(text, size, deg, height_add=0, reverse=False):
 
 @app.route("/", methods=['POST'])
 def pdf_gen():
+    print('START - pdf')
     pdf_bytes = zlib.decompress(base64.b64decode(request.form['pdf_zip']))
     draw_items = json.loads(request.form['draw_items'])
 
@@ -70,6 +71,8 @@ def pdf_gen():
 
 @app.route('/hello')
 def hello():
+    print('START - hello')
+
     return 'hello there'
 
 if __name__ == '__main__':

@@ -8,10 +8,15 @@ The inputs:
 1. Blank or template PDF file 
 2. Spreadsheet or Database table with content to be written into PDF  
 2and contents from spreadsheet or database. to be written on the PDF file and returns the PDF with the content.  An example use case is sending the service a PDF with a form or table and data for the form or table.  This service returns a PDF filled out with the provided data.
-
-**Installation**  
+  
+<br/>  
+  
+*****
+# Installation  
 Go to: https://console.cloud.google.com/ and open ***Cloud Shell Terminal***    
 ![Open Cloud Shell Terminal](cloud-shell-terminal.png)  
+  
+<br/>  
 Run the following commands:
 
 ##### get code
@@ -27,7 +32,7 @@ Run the following commands:
 > --platform=managed --region=us-central1 --no-allow-unauthenticated  --timeout=300 \
 > --cpu=2 --memory=2G --concurrency=1 --ingress=all --port=8080
  
-##### output
+##### expected output
 The output from the previous command will contain the URL to the Cloud Run service.  For example:
 
 > Deploying container to Cloud Run service [pdf-gen] in project [singularity-beta] region [us-central1]  
@@ -37,5 +42,56 @@ The output from the previous command will contain the URL to the Cloud Run servi
 Done.  
 Service [pdf-gen] revision [pdf-gen-00001-fep] has been deployed and is serving 100 percent of traffic.  
 Service URL: __https://pdf-gen-abc123xzy987-uc.a.run.app__  
- 
+
+<br/>  
+
+****
+# Simple Test
+> curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" https://pdf-gen-abc123xzy987-uc.a.run.app/hello
+#### expected output
+> hello there 
+
+<br/>  
+
+****
+# Sample Use Cases (3)
+### 1. Google Sheets input
+##### create service account
+> gcloud iam service-accounts create pdf-gen  
+> gcloud projects add-iam-policy-binding ${GOOGLE_CLOUD_PROJECT} \  
+> 
+> --member="serviceAccount:pdf-gen@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com"  \\  
+> --role="roles/owner"
+##### credentials file
+> gcloud iam service-accounts keys create pdf-gen.json --iam-account=pdf-gen@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com  
+  
+### 2. BigQuery input
+### 3. Python input
+  
+****
+****
+****
+****  
+****
+****
+****
+****
+****
+****
+****
+****  
+****
+****
+****
+****
+
+
+
+
+
+
+
+
+
+
 

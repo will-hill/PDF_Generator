@@ -1,10 +1,12 @@
 from PIL import ImageFont, Image, ImageDraw, ImageOps
 from PyPDF2 import PdfFileReader, PdfFileWriter
+from flask import Flask, request, send_file
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from google.cloud import bigquery
-from flask import Flask, request, send_file
 from google.cloud import storage
+import google.cloud.logging
+import logging
 import base64
 import json
 import zlib
@@ -13,6 +15,10 @@ import re
 import os
 
 app = Flask(__name__)
+
+log_client = google.cloud.logging.Client()
+log_client.get_default_handler()
+log_client.setup_logging()
 
 
 def handwriting_gen_file(text, size, deg, height_add=0, reverse=False):
@@ -49,7 +55,7 @@ def sheets_to_bq(sheets_url, project_id, dataset_id, table_id, schema):
 
 @app.route("/generate-pdf", methods=['GET'])
 def generate_pdf():
-    print('START:GET - generate-pdf')
+    logging.debug('START:GET - generate-pdf')
 
     project_id = request.args.get('project-id')
     sheets_url = request.args.get('sheet')
@@ -66,19 +72,19 @@ def generate_pdf():
               bigquery.SchemaField('hand_height_shift', 'Integer'),
               bigquery.SchemaField('is_usd', 'Boolean')]
 
-    print('query Sheets')
+    logging.debug('query Sheets')
     draw_items = sheets_to_bq(sheets_url, project_id, dataset_id, table_id, schema)
 
-    print('grab blank PDF')
+    logging.debug('grab blank PDF')
     with open('blank.pdf') as blank_pdf:
         gcs_client = storage.Client()
         gcs_client.download_blob_to_file(gcs_pdf_url, blank_pdf)
 
-    print('generate PDF')
+    logging.debug('generate PDF')
     written_pdf = write_pdf(draw_items, 'blank.pdf')
     os.remove('blank.pdf')
 
-    print('return PDF')
+    logging.debug('return PDF')
     return send_file(written_pdf)
 
 
@@ -115,7 +121,7 @@ def write_pdf(draw_items, blank_pdf):
 
 @app.route("/", methods=['POST'])
 def pdf_gen():
-    print('START - pdf')
+    logging.debug('START - pdf')
     pdf_bytes = zlib.decompress(base64.b64decode(request.form['pdf_zip']))
     draw_items = json.loads(request.form['draw_items'])
 
@@ -162,7 +168,7 @@ def pdf_gen():
 
 @app.route('/hello')
 def hello():
-    print('START - hello')
+    logging.debug('START - hello')
 
     return 'hello there\n'
 

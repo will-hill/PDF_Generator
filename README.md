@@ -28,9 +28,7 @@ Run the following commands:
 ##### load image into Google Cloud
 > gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/pdf-gen
 ##### deploy as Cloud Run service
-> gcloud run deploy pdf-gen --image=gcr.io/${GOOGLE_CLOUD_PROJECT}/pdf-gen \
-> --platform=managed --region=us-central1 --no-allow-unauthenticated  --timeout=300 \
-> --cpu=2 --memory=2G --concurrency=1 --ingress=all --port=8080
+> gcloud run deploy pdf-gen --image=gcr.io/${GOOGLE_CLOUD_PROJECT}/pdf-gen --platform=managed --region=us-central1 --no-allow-unauthenticated  --timeout=300 --cpu=2 --memory=2G --concurrency=1 --ingress=all --port=8080
  
 ##### expected output
 The output from the previous command will contain the URL to the Cloud Run service.  For example:

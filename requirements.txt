@@ -1,10 +1,12 @@
 google-cloud-bigquery==2.16.1
 google-cloud-storage==1.38.0
 google-cloud-logging==2.4.0
+reportlab==3.5.67
 requests==2.25.1
+pyarrow==4.0.0
+PyPDF2==1.26.0
+pandas==1.2.4
+Pillow==8.2.0
 ptvsd==4.3.2
 Flask==2.0.0
-Pillow==8.2.0
-PyPDF2==1.26.0
-reportlab==3.5.67
 wand==0.6.6
